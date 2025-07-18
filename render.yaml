@@ -15,7 +15,7 @@ services:
       - key: APP_PASSWORD
         fromSecret: true # También se tomará de los "Secrets"
     # --- Almacenamiento Persistente para FAISS ---
-    #disks:
-     # - name: faiss_storage
-     #   mountPath: /app/vector_store_faiss_multimodal # ¡Muy importante!
-     #  sizeGB: 1 # 1 GB es suficiente para empezar
+    disks:
+      - name: faiss_storage
+        mountPath: /app/vector_store_faiss_multimodal # ¡Muy importante!
+        sizeGB: 1 # 1 GB es suficiente para empezar
