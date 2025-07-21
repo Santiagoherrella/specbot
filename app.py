@@ -24,9 +24,37 @@ load_dotenv()
 # --- Configuración de la Página Streamlit (MOVIDO AL PRINCIPIO) ---
 st.set_page_config(page_title="Analizador de Documentos Ad-Hoc", layout="wide")
 
-# --- Configuración General ---
+def check_password():
+    """Devuelve True si el usuario ha introducido la contraseña correcta."""
 
-MODEL_NAME_LLM = "gpt-4.1-nano-2025-04-14" # O el modelo que prefieras
+    def password_entered():
+        """Verifica si la contraseña introducida por el usuario es correcta."""
+        if st.session_state["password"] == st.secrets["password"]:
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # No mantener la contraseña en el estado
+        else:
+            st.session_state["password_correct"] = False
+
+    # Inicializar estado si no existe
+    if "password_correct" not in st.session_state:
+        # Primero, mostrar el input de contraseña.
+        st.text_input(
+            "Contraseña", type="password", on_change=password_entered, key="password"
+        )
+        return False
+    elif not st.session_state["password_correct"]:
+        # Contraseña incorrecta, mostrar el input de nuevo con un mensaje de error.
+        st.text_input(
+            "Contraseña", type="password", on_change=password_entered, key="password"
+        )
+        st.error("😕 Contraseña incorrecta. Por favor, inténtalo de nuevo.")
+        return False
+    else:
+        # Contraseña correcta, la app puede continuar.
+        return True
+# --- Configuración General ---
+if check_password():
+    MODEL_NAME_LLM = "gpt-4.1-nano-2025-04-14" # O el modelo que prefieras
 
 # --- Prompt para Resumen Ejecutivo ---
 
