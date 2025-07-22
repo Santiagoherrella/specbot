@@ -70,7 +70,7 @@ def extract_text_from_pdf_bytes(uploaded_file_content_bytes, filename="documento
     
 
 # --- Inicialización de Modelos ---
-llm_instance = get_llm()
+llm_instance = get_llm(key)
 
 # --- Inicialización del Estado de Sesión para el Documento Ad-Hoc ---
 if "adhoc_filename" not in st.session_state:
