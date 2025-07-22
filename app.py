@@ -53,69 +53,68 @@ def check_password():
         # Contraseña correcta, la app puede continuar.
         return True
 # --- Configuración General ---
-if check_password():
-   
 
-    # --- Prompt para Resumen Ejecutivo ---
+# --- Prompt para Resumen Ejecutivo ---
 
-    EXECUTIVE_SUMMARY_PROMPT = get_prompt_summary_str () 
-    # --- Prompt para RAG sobre el Documento Cargado ---
+EXECUTIVE_SUMMARY_PROMPT = get_prompt_summary_str () 
+# --- Prompt para RAG sobre el Documento Cargado ---
 
-    CUSTOM_RAG_DOC_PROMPT = get_prompt_RAG_str()
+CUSTOM_RAG_DOC_PROMPT = get_prompt_RAG_str()
 
-    # --- Funciones Cacheadas ---
+# --- Funciones Cacheadas ---
 
-    @st.cache_resource
-    def cached_get_llm():
-        return get_llm()
+@st.cache_resource
+def cached_get_llm():
+    return get_llm()
 
 
-    def extract_text_from_pdf_bytes(uploaded_file_content_bytes, filename="documento_cargado.pdf"):
-        """Extrae texto de un archivo PDF cargado (contenido en bytes) y devuelve Documents de Langchain."""
-        try:
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                tmp_file.write(uploaded_file_content_bytes)
-                tmp_file_path = tmp_file.name
-            
-            loader = PyPDFLoader(tmp_file_path)
-            # .load() devuelve una lista de Document, uno por página.
-            langchain_docs = loader.load() 
-            os.remove(tmp_file_path)
+def extract_text_from_pdf_bytes(uploaded_file_content_bytes, filename="documento_cargado.pdf"):
+    """Extrae texto de un archivo PDF cargado (contenido en bytes) y devuelve Documents de Langchain."""
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+            tmp_file.write(uploaded_file_content_bytes)
+            tmp_file_path = tmp_file.name
+        
+        loader = PyPDFLoader(tmp_file_path)
+        # .load() devuelve una lista de Document, uno por página.
+        langchain_docs = loader.load() 
+        os.remove(tmp_file_path)
 
-            if not langchain_docs:
-                st.warning("No se pudo extraer contenido del PDF o el PDF está vacío.")
-                return None
-            
-            # Asignar el nombre de archivo original a los metadatos de cada Documento de página
-            for doc in langchain_docs:
-                doc.metadata["source"] = filename
-                doc.metadata["filename"] = filename
-                # 'page' ya es añadido por PyPDFLoader
-
-            return langchain_docs
-        except Exception as e:
-            st.error(f"Error al extraer texto del PDF: {e}")
+        if not langchain_docs:
+            st.warning("No se pudo extraer contenido del PDF o el PDF está vacío.")
             return None
         
+        # Asignar el nombre de archivo original a los metadatos de cada Documento de página
+        for doc in langchain_docs:
+            doc.metadata["source"] = filename
+            doc.metadata["filename"] = filename
+            # 'page' ya es añadido por PyPDFLoader
 
-    # --- Inicialización de Modelos ---
-    llm_instance = get_llm()
+        return langchain_docs
+    except Exception as e:
+        st.error(f"Error al extraer texto del PDF: {e}")
+        return None
+    
 
-    # --- Inicialización del Estado de Sesión para el Documento Ad-Hoc ---
-    if "adhoc_filename" not in st.session_state:
-        st.session_state.adhoc_filename = None
-    if "adhoc_summary" not in st.session_state:
-        st.session_state.adhoc_summary = None
-    if "adhoc_retriever" not in st.session_state: # Cambiado de pliego_retriever
-        st.session_state.adhoc_retriever = None
-    if "adhoc_chain" not in st.session_state: # Cambiado de pliego_chain
-        st.session_state.adhoc_chain = None
-    if "adhoc_messages" not in st.session_state: # Cambiado de pliego_messages
-        st.session_state.adhoc_messages = [
-            {"role": "assistant", "content": "Carga un documento PDF para generar un resumen y luego hacer preguntas específicas sobre él."}
-        ]
+# --- Inicialización de Modelos ---
+llm_instance = get_llm()
 
-    # --- Interfaz Principal Streamlit ---
+# --- Inicialización del Estado de Sesión para el Documento Ad-Hoc ---
+if "adhoc_filename" not in st.session_state:
+    st.session_state.adhoc_filename = None
+if "adhoc_summary" not in st.session_state:
+    st.session_state.adhoc_summary = None
+if "adhoc_retriever" not in st.session_state: # Cambiado de pliego_retriever
+    st.session_state.adhoc_retriever = None
+if "adhoc_chain" not in st.session_state: # Cambiado de pliego_chain
+    st.session_state.adhoc_chain = None
+if "adhoc_messages" not in st.session_state: # Cambiado de pliego_messages
+    st.session_state.adhoc_messages = [
+        {"role": "assistant", "content": "Carga un documento PDF para generar un resumen y luego hacer preguntas específicas sobre él."}
+    ]
+
+# --- Interfaz Principal Streamlit ---
+if check_password():
     st.image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9JyBfUQZXzv2P5zfX2DEMBqCSrLGTVIxNCA&s", width=80) # Logo de ejemplo
     st.title("📄 Analizador y Chat de Documento Ad-Hoc")
     st.caption(f"Hora actual en Pereira: {time.strftime('%Y-%m-%d %H:%M:%S %Z')}")
