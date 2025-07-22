@@ -20,10 +20,14 @@ from promots import get_prompt_summary_str
 from dotenv import load_dotenv
 from corelogic import (get_llm)
 load_dotenv()
+ 
 
 # --- Configuración de la Página Streamlit (MOVIDO AL PRINCIPIO) ---
 st.set_page_config(page_title="Analizador de Documentos Ad-Hoc", layout="wide")
-
+MODEL_NAME_LLM = "gpt-4.1-nano-2025-04-14" # O el modelo que prefieras
+ @st.cache_resource
+    def cached_get_llm():
+        return get_llm()
 def check_password():
     """Devuelve True si el usuario ha introducido la contraseña correcta."""
 
@@ -54,7 +58,7 @@ def check_password():
         return True
 # --- Configuración General ---
 if check_password():
-    MODEL_NAME_LLM = "gpt-4.1-nano-2025-04-14" # O el modelo que prefieras
+    
 
     # --- Prompt para Resumen Ejecutivo ---
 
@@ -65,10 +69,7 @@ if check_password():
 
     # --- Funciones Cacheadas ---
 
-    @st.cache_resource
-    @st.cache_resource
-    def cached_get_llm():
-        return get_llm()
+  
 
 
     def extract_text_from_pdf_bytes(uploaded_file_content_bytes, filename="documento_cargado.pdf"):
