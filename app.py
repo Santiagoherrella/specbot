@@ -25,7 +25,7 @@ load_dotenv()
 # --- Configuración de la Página Streamlit (MOVIDO AL PRINCIPIO) ---
 st.set_page_config(page_title="Analizador de Documentos Ad-Hoc", layout="wide")
  @st.cache_resource
-    def cached_get_llm():
+    def get_llm():
         return get_llm()
 def check_password():
     """Devuelve True si el usuario ha introducido la contraseña correcta."""
