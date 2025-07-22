@@ -24,7 +24,6 @@ load_dotenv()
 
 # --- Configuración de la Página Streamlit (MOVIDO AL PRINCIPIO) ---
 st.set_page_config(page_title="Analizador de Documentos Ad-Hoc", layout="wide")
-MODEL_NAME_LLM = "gpt-4.1-nano-2025-04-14" # O el modelo que prefieras
  @st.cache_resource
     def cached_get_llm():
         return get_llm()
