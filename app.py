@@ -35,9 +35,9 @@ EXECUTIVE_SUMMARY_PROMPT = get_prompt_summary_str ()
 CUSTOM_RAG_DOC_PROMPT = get_prompt_RAG_str()
 
 # --- Funciones Cacheadas ---
-
+key = st.secrets["OPENAI_API_KEY"]
 @st.cache_resource
-def cached_get_llm():
+def cached_get_llm()key:
     return get_llm()
 
 
