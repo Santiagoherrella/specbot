@@ -18,7 +18,7 @@ def get_llmgem(keygem):
     try:
             llm = ChatOpenAI(model=MODEL_NAME_LLMGEM,
                               temperature=0.3, 
-                              api_key=Keygem)
+                              api_key=keygem)
             return llm
     except Exception as e:
         print(f"Error al inicializar LLM de GEMINI: {e}")
