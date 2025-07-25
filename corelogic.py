@@ -10,4 +10,4 @@ def get_llm(key):
         return llm
     except Exception as e:
         print(f"Error al inicializar LLM de OpenAI: {e}")
-        raise
+    
