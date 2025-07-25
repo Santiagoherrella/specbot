@@ -16,7 +16,7 @@ MODEL_NAME_LLMGEM= "models/gemini-2.0-flash"
 def get_llmgem(key):
     """Carga y devuelve el modelo LLM de OpenAI."""
     try:
-            llm = ChatGoogleGenerativeAImodel=(model=MODEL_NAME_LLMGEM,
+            llm = ChatGoogleGenerativeAImodel(model=MODEL_NAME_LLMGEM,
                               temperature=0.3, 
                               api_key=key)
             return llm
