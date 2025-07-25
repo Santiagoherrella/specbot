@@ -34,11 +34,12 @@ EXECUTIVE_SUMMARY_PROMPT = get_prompt_summary_str ()
 CUSTOM_RAG_DOC_PROMPT = get_prompt_RAG_str()
 
 # --- Funciones Cacheadas ---
-key = st.secrets["OPENAI_API_KEY"]
+key = st.secrets["GOOGLE_API_KEY"]
+
 
 @st.cache_resource
-def cached_get_llm(key):
-    return get_llm(key)
+def cached_get_llmgem(key):
+    return get_llmgem(key)
 
 
 def extract_text_from_pdf_bytes(uploaded_file_content_bytes, filename="documento_cargado.pdf"):
@@ -70,7 +71,7 @@ def extract_text_from_pdf_bytes(uploaded_file_content_bytes, filename="documento
     
 
 # --- Inicialización de Modelos ---
-llm_instance = get_llm(key)
+llm_instance = get_llmgem(key)
 
 
 # --- Inicialización del Estado de Sesión para el Documento Ad-Hoc ---
