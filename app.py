@@ -18,7 +18,7 @@ from langchain_core.documents import Document
 from promots import get_prompt_RAG_str
 from promots import get_prompt_summary_str 
 from dotenv import load_dotenv
-from corelogic import (get_llm)
+from corelogic import get_llm
 load_dotenv()
 
 # --- Configuración de la Página Streamlit (MOVIDO AL PRINCIPIO) ---
