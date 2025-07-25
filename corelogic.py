@@ -12,3 +12,14 @@ def get_llm(key):
     except Exception as e:
         print(f"Error al inicializar LLM de OpenAI: {e}")
         raise
+MODEL_NAME_LLMGEM= "models/gemini-2.0-flash"
+def get_llmgem(keygem):
+    """Carga y devuelve el modelo LLM de OpenAI."""
+    try:
+            llm = ChatOpenAI(model=MODEL_NAME_LLMGEM,
+                              temperature=0.3, 
+                              api_key=Keygem)
+            return llm
+    except Exception as e:
+        print(f"Error al inicializar LLM de GEMINI: {e}")
+        raise
