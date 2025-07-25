@@ -1,4 +1,3 @@
-import os
 from langchain_google_genai import ChatGoogleGenerativeAI
 MODEL_NAME_LLM = "models/gemini-2.0-flash"
 
