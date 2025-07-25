@@ -18,8 +18,7 @@ from langchain_core.documents import Document
 from promots import get_prompt_RAG_str
 from promots import get_prompt_summary_str 
 from dotenv import load_dotenv
-from corelogic import get_llm
-load_dotenv()
+from corelogic import get_llm, get_llmgem
 
 # --- Configuración de la Página Streamlit (MOVIDO AL PRINCIPIO) ---
 st.set_page_config(page_title="Analizador de Documentos Ad-Hoc", layout="wide")
@@ -36,10 +35,13 @@ CUSTOM_RAG_DOC_PROMPT = get_prompt_RAG_str()
 
 # --- Funciones Cacheadas ---
 key = st.secrets["OPENAI_API_KEY"]
-@st.cache_resource
-def cached_get_llm(key):
-    return get_llm(key)
-
+keygem = st.secrets["GOOGLE_API_KEY"]
+#@st.cache_resource
+#def cached_get_llm(key):
+    #return get_llm(key)
+@st.cache_resource    
+def cached_get_llmgem(keygem):
+    return get_llmgem(keygem)
 
 def extract_text_from_pdf_bytes(uploaded_file_content_bytes, filename="documento_cargado.pdf"):
     """Extrae texto de un archivo PDF cargado (contenido en bytes) y devuelve Documents de Langchain."""
@@ -70,7 +72,8 @@ def extract_text_from_pdf_bytes(uploaded_file_content_bytes, filename="documento
     
 
 # --- Inicialización de Modelos ---
-llm_instance = get_llm(key)
+#llm_instance = get_llm(key)
+llm_instance =get_llmgem(keygem)
 
 # --- Inicialización del Estado de Sesión para el Documento Ad-Hoc ---
 if "adhoc_filename" not in st.session_state:
