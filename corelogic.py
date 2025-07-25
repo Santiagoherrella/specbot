@@ -8,6 +8,4 @@ def get_llm(key):
                                          temperature=0.3,
                                          google_api_key=key)
         return llm
-    except Exception as e:
-        print(f"Error al inicializar LLM de OpenAI: {e}")
     
