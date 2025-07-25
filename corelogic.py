@@ -1,10 +1,14 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-MODEL_NAME_LLM = "models/gemini-2.0-flash"
+import os
+from langchain_openai import ChatOpenAI
+MODEL_NAME_LLM = "gpt-4.1-nano-2025-04-14"
 
 def get_llm(key):
     """Carga y devuelve el modelo LLM de OpenAI."""
-    try:llm = ChatGoogleGenerativeAI(model=MODEL_NAME_LLM, 
-                                         temperature=0.3,
-                                         google_api_key=key)
+    try:
+        llm = ChatOpenAI(model_name=MODEL_NAME_LLM, temperature=0.1,
+                         api_key=key,
+                         max_tokens=1500)
         return llm
-    
+    except Exception as e:
+        print(f"Error al inicializar LLM de OpenAI: {e}")
+        raise
