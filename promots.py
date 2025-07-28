@@ -45,12 +45,12 @@ Extrae y organiza detalladamente la siguiente información clave:
    - Tratamientos especiales para condiciones ambientales específicas
    - Zonas con tratamientos diferenciados
 
-5. ACCESORIOS Y COMPONENTES:
-   - Equipamiento de protección requerido
-   - Sistemas de monitoreo
-   - Gabinetes/cajas de conexión
+5. ACCESORIOS Y COMPONENTES: (si se nombran fabricante so items especificos solicitados por el cliente nombrarlos)
+   - Equipamiento de protección requerido 
+   - Sistemas de monitoreo - si requieren contactos
+   - Gabinetes/cajas de conexión 
    - Accesorios especiales (Manovacuómetro, accesorios con contactos)
-   - Válvulas, dispositivos de alivio de presión
+   - Válvulas, dispositivos de alivio de presión -  si llevan contactos
    - Sistemas de puesta a tierra
 
 6. NORMATIVA Y CERTIFICACIONES (ANÁLISIS DETALLADO):
