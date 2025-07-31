@@ -49,7 +49,6 @@ Extrae y organiza detalladamente la siguiente información clave:
    - Equipamiento de protección requerido (Alguna marca en especifico)
    - Cambiadores de tension o conmutadores (Alguna marca en especifico)
    - Aisladores de alta y baja tension con un bil o fabricnate especifico.
-   - Sistemas de monitoreo
    - Gabinetes/cajas de conexión 
    - Accesorios especiales (Manovacuómetro, niveles especiles, valvula de nitrogeno)
    - Accesorios de control (niveles electronicos, VSP con alerta electronica, termometro electronico, termometro de devanados, entre otros) 
