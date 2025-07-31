@@ -79,6 +79,10 @@ Extrae y organiza detalladamente la siguiente información clave:
    - Condiciones de transporte especificadas
    - Documentación para transporte y exportación
    - Preparación para manejo por grúa o montacargas
+9. ENTREGABLES DE LA OFERTA:
+    - Planos requeridos. 
+    - Pruebas especificas.
+    - Declaracion de perdias.
 
 Para cada punto, proporciona detalles específicos y valores numéricos exactos cuando estén disponibles. Si algún aspecto no está especificado en el documento, indícalo claramente como "No especificado" en la sección correspondiente.
 
