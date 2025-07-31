@@ -45,12 +45,15 @@ Extrae y organiza detalladamente la siguiente información clave:
    - Tratamientos especiales para condiciones ambientales específicas
    - Zonas con tratamientos diferenciados
 
-5. ACCESORIOS Y COMPONENTES: (si se nombran fabricante so items especificos solicitados por el cliente nombrarlos)
-   - Equipamiento de protección requerido 
-   - Sistemas de monitoreo - si requieren contactos
+5. ACCESORIOS Y COMPONENTES: (si se nombran fabricante o los items especificos solicitados por el cliente nombrarlos)
+   - Equipamiento de protección requerido (Alguna marca en especifico)
+   - Cambiadores de tension o conmutadores (Alguna marca en especifico)
+   - Aisladores de alta y baja tension con un bil o fabricnate especifico.
+   - Sistemas de monitoreo
    - Gabinetes/cajas de conexión 
-   - Accesorios especiales (Manovacuómetro, accesorios con contactos)
-   - Válvulas, dispositivos de alivio de presión -  si llevan contactos
+   - Accesorios especiales (Manovacuómetro, niveles especiles, valvula de nitrogeno)
+   - Accesorios de control (niveles electronicos, VSP con alerta electronica, termometro electronico, termometro de devanados, entre otros) 
+   - Válvulas, dispositivos de alivio de presión 
    - Sistemas de puesta a tierra
 
 6. NORMATIVA Y CERTIFICACIONES (ANÁLISIS DETALLADO):
@@ -79,7 +82,7 @@ Extrae y organiza detalladamente la siguiente información clave:
 
 Para cada punto, proporciona detalles específicos y valores numéricos exactos cuando estén disponibles. Si algún aspecto no está especificado en el documento, indícalo claramente como "No especificado" en la sección correspondiente.
 
-El resumen debe ser exhaustivo, técnicamente preciso y organizado de manera que sirva como documento de referencia para el equipo de ingeniería y diseño.
+El resumen debe ser exhaustivo, técnicamente preciso y organizado de manera que sirva como documento de referencia para el equipo de ingeniería y diseño,.
 
 Documento del Cliente (Pliego): {document_text}
 
