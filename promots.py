@@ -27,7 +27,7 @@ Extrae y organiza detalladamente la siguiente información clave:
 3. CARACTERÍSTICAS CONSTRUCTIVAS Y MECÁNICAS: (si en la oferta se habla de diferentes clientes, discriminar las características de cada uno)
    - Tipo de refrigeración (ONAN, ONAF, etc.)
    - Materiales de bobinados
-   - Tipo de núcleo y material
+   - Tipo de núcleo y material (restriccion a acero amorfo)
    - Sistema de aislamiento
    - Aceite o fluido dieléctrico especificado
    - Características mecánicas del tanque (espesores de lámina, refuerzos)
@@ -45,7 +45,7 @@ Extrae y organiza detalladamente la siguiente información clave:
    - Tratamientos especiales para condiciones ambientales específicas
    - Zonas con tratamientos diferenciados
 
-5. ACCESORIOS Y COMPONENTES: (si se nombran fabricante o los items especificos solicitados por el cliente nombrarlos)
+5. ACCESORIOS Y COMPONENTES: (si se nombran fabricante o los items especificos solicitados por el cliente nombrarlos, restricción de frabricantes chinos)
    - Equipamiento de protección requerido (Alguna marca en especifico)
    - Cambiadores de tension o conmutadores (Alguna marca en especifico)
    - Aisladores de alta y baja tension con un bil o fabricnate especifico.
@@ -82,7 +82,7 @@ Extrae y organiza detalladamente la siguiente información clave:
 9. ENTREGABLES DE LA OFERTA:
     - Planos requeridos. 
     - Pruebas especificas.
-    - Declaracion de perdias.
+    - Declaracion de perdidas.
 
 Para cada punto, proporciona detalles específicos y valores numéricos exactos cuando estén disponibles. Si algún aspecto no está especificado en el documento, indícalo claramente como "No especificado" en la sección correspondiente.
 
