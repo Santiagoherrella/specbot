@@ -50,8 +50,8 @@ Extrae y organiza detalladamente la siguiente información clave:
    - Cambiadores de tension o conmutadores (Alguna marca en especifico)
    - Aisladores de alta y baja tension con un bil o fabricnate especifico.
    - Gabinetes/cajas de conexión 
+   - Sistemas de monitoreo
    - Accesorios especiales (Manovacuómetro, niveles especiles, valvula de nitrogeno)
-   - Accesorios de control (niveles electronicos, VSP con alerta electronica, termometro electronico, termometro de devanados, entre otros) 
    - Válvulas, dispositivos de alivio de presión 
    - Sistemas de puesta a tierra
 
@@ -112,3 +112,4 @@ Pregunta
 Respuesta util basada en el contecto dado y la pregunta realizada
 """
     )
+
