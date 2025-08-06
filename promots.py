@@ -4,9 +4,16 @@ def get_prompt_summary_str():
     return PromptTemplate(
         input_variables=["context", "question"],
         template="""
-        Eres un ingeniero electricista y mecánico especializado en el diseño de transformadores eléctricos para una empresa fabricante. Tu tarea es analizar el siguiente pliego de condiciones técnicas y generar un resumen ejecutivo estructurado EN ESPAÑOL que servirá como base para iniciar el proceso de diseño y fabricación.
+               Eres un ingeniero electricista y mecánico especializado en el diseño y fabricación de transformadores para la empresa Magnetron S.A.S.
+Tu misión es analizar el siguiente Pliego de Condiciones Técnicas y elaborar un Resumen Ejecutivo exhaustivo en ESPAÑOL que sirva como base de arranque para ingeniería y producción.
 
-Extrae y organiza detalladamente la siguiente información clave:
+Instrucciones de salida
+Sigue exactamente el índice de secciones (1-9) mostrado más abajo.
+- Coloca cada dato donde corresponda; usa “No especificado” cuando el pliego no lo indique.
+- Incluye valores numéricos concretos con sus unidades.
+- Si existen varios clientes o variantes, diferéncialos claramente.
+- Después del resumen, genera dos tablas verticales aptas para copiar en Excel (sin formatos especiales).
+- Mantén un tono técnico, preciso y conciso; no inventes datos.
 
 1. ESPECIFICACIONES GENERALES:
    - Tipo de transformador(es) requerido(s)
@@ -27,7 +34,8 @@ Extrae y organiza detalladamente la siguiente información clave:
 3. CARACTERÍSTICAS CONSTRUCTIVAS Y MECÁNICAS: (si en la oferta se habla de diferentes clientes, discriminar las características de cada uno)
    - Tipo de refrigeración (ONAN, ONAF, etc.)
    - Materiales de bobinados
-   - Tipo de núcleo y material (restriccion a acero amorfo)
+   - Forma construcutiva de la marte activa (shell, core, evans, 5 piernas, con debanado terciario, etc)
+   - Tipo de núcleo y material (Si permite acero amorfo)
    - Sistema de aislamiento
    - Aceite o fluido dieléctrico especificado
    - Características mecánicas del tanque (espesores de lámina, refuerzos)
@@ -45,14 +53,15 @@ Extrae y organiza detalladamente la siguiente información clave:
    - Tratamientos especiales para condiciones ambientales específicas
    - Zonas con tratamientos diferenciados
 
-5. ACCESORIOS Y COMPONENTES: (si se nombran fabricante o los items especificos solicitados por el cliente nombrarlos, restricción de frabricantes chinos)
+5. ACCESORIOS Y COMPONENTES:
+(si se nombran fabricante o los items especificos solicitados por el cliente nombrarlos, restricción de frabricantes chinos)
    - Equipamiento de protección requerido (Alguna marca en especifico)
    - Cambiadores de tension o conmutadores (Alguna marca en especifico)
    - Aisladores de alta y baja tension con un bil o fabricnate especifico.
-   - Gabinetes/cajas de conexión 
    - Sistemas de monitoreo
-   - Accesorios especiales (Manovacuómetro, niveles especiles, valvula de nitrogeno)
-   - Válvulas, dispositivos de alivio de presión 
+   - Gabinetes/cajas de conexión
+   - Accesorios especiales (Manovacuómetro, accesorios con contactos)
+   - Válvulas, dispositivos de alivio de presión
    - Sistemas de puesta a tierra
 
 6. NORMATIVA Y CERTIFICACIONES (ANÁLISIS DETALLADO):
@@ -83,13 +92,49 @@ Extrae y organiza detalladamente la siguiente información clave:
     - Pruebas especificas.
     - Declaracion de perdidas.
 
+Tabla #1 – Parámetros Eléctricos (FORMATO VERTICAL)
+Campo	Valor
+Compañía	Magnetron S.A.S.
+Especificaciones del cliente	«Nombre del pliego y código»
+Normas	«Normas de manufactura requeridas»
+Tipos de transformador	«Tipos incluidos en el pliego»
+Potencias (kVA/MVA)	«Potencias incluidas»
+Fases	«Fases del pliego»
+Tipo de refrigeración	«Según pliego»
+Polaridad / Grupo de conexión	«Según pliego»
+Voltaje primario (kV)	«Según pliego»
+BIL primario (kV)	«Según pliego»
+Voltaje secundario (kV)	«Según pliego»
+BIL secundario (kV)	«Según pliego»
+Frecuencia (Hz)	«Según pliego»
+Eficiencia requerida	«Según pliego» o N/A
+Pérdidas con carga (W)	«Según pliego» o N/A
+Pérdidas sin carga (W)	«Según pliego» o N/A
+Impedancia (%)	«Según pliego»
+Corriente de excitación (%)	«Según pliego»
+
+Tabla #2 – Accesorios (FORMATO VERTICAL)
+Accesorio	Características / Especificación
+Terminal de baja tensión	«Según pliego» o N/A
+Terminal de alta tensión	«Según pliego» o N/A
+Conmutador	«Según pliego» o N/A
+Seccionador	«Según pliego» o N/A
+Pararrayos	«Según pliego» o N/A
+Fusibles	«Según pliego» o N/A
+Termómetro	«Según pliego» o N/A
+Nivel de aceite	«Según pliego» o N/A
+Medidor de presión y/o vacío	«Según pliego» o N/A
+Válvulas	«Según pliego» o N/A
+Otros accesorios	«Listar» o N/A
+
+
 Para cada punto, proporciona detalles específicos y valores numéricos exactos cuando estén disponibles. Si algún aspecto no está especificado en el documento, indícalo claramente como "No especificado" en la sección correspondiente.
 
-El resumen debe ser exhaustivo, técnicamente preciso y organizado de manera que sirva como documento de referencia para el equipo de ingeniería y diseño,.
+El resumen debe ser exhaustivo, técnicamente preciso y organizado de manera que sirva como documento de referencia para el equipo de ingeniería y diseño.
 
 Documento del Cliente (Pliego): {document_text}
 
-Resumen profesional (en ESPAÑOL):
+Resumen profesional(en ESPAÑOL):
 """
     )
 
@@ -112,4 +157,5 @@ Pregunta
 Respuesta util basada en el contecto dado y la pregunta realizada
 """
     )
+
 
