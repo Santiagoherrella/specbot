@@ -23,7 +23,7 @@ Sigue exactamente el índice de secciones (1-9) mostrado más abajo.
    - Condiciones de servicio (continuo, intermitente, etc.)
 
 2. PARÁMETROS ELÉCTRICOS:
-   - Voltajes nominales (primario/secundario)
+   - Voltajes nominales (primario/secundario) (Si es pedestal si es maya o radial)
    - Frecuencia de operación
    - Grupo de conexión
    - Impedancia de cortocircuito (%)
@@ -157,5 +157,6 @@ Pregunta
 Respuesta util basada en el contecto dado y la pregunta realizada
 """
     )
+
 
 
