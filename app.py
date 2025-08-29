@@ -1,4 +1,5 @@
 # app.py
+#streamlit run app.py
 import time
 import base64
 from pathlib import Path
@@ -118,3 +119,149 @@ def apply_skin():
           margin: 18px 0 10px 0;
         }}
 
+        /* Bloques solo para ESPACIAR (sin card) */
+        .pad-block {{
+          padding: 14px;
+          margin-bottom: 14px;
+        }}
+
+        /* Personalizar st.info para que sea BLANCO en ambos modos */
+        .stAlert div[role="alert"] {{
+          background: #ffffff !important;
+          color: #0f172a !important;
+          border: 1px solid var(--border) !important;
+          border-radius: 12px !important;
+        }}
+
+        /* Inputs con bordes suaves y radio leve */
+        .stTextInput > div > div > input,
+        .stTextArea textarea,
+        .stSelectbox > div > div,
+        .stDateInput > div > div > input {{
+          border-radius: 8px !important;
+        }}
+
+        /* Botones corporativos */
+        .stButton > button {{
+          background: var(--corp) !important;
+          color:#fff !important;
+          border-radius: 10px !important;
+          border: none !important;
+          font-weight:700 !important;
+        }}
+        .stButton > button:hover {{ filter: brightness(.95); }}
+        
+        /* Footer */
+        .corp-footer {{
+          position: fixed; left: 0; right: 0; bottom: 0;
+          background: var(--corp); color: #fff;
+          padding: 10px 16px; text-align: center; font-size: .9rem; z-index: 1000;
+        }}
+
+        
+
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+def hero_header(title="Analizador y Resumidor MultiPDF con IA", subtitle=None):
+    if subtitle is None:
+        subtitle = f"Hora actual: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+    st.markdown(
+        f"""
+        <div class="hero">
+          <div class="hero-bg"></div>
+          <div class="hero-content">
+             <span class="doc-emoji" aria-hidden="true">📄</span>
+             <div>
+               <!-- OJO: usamos DIV (no h1) para que el tamaño respete tu CSS -->
+               <div class="hero-title">{title}</div>
+               <div class="hero-sub">{subtitle}</div>
+             </div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+def section_title(txt: str):
+    st.markdown(f'<div class="section-title">{txt}</div>', unsafe_allow_html=True)
+
+def pad_start(): st.markdown('<div class="pad-block">', unsafe_allow_html=True)
+def pad_end():   st.markdown('</div>', unsafe_allow_html=True)
+
+def footer_corp():
+    st.markdown('<div class="corp-footer">© MAGNETRON SAS 2025</div>', unsafe_allow_html=True)
+
+# -----------------------------
+# APLICAR DISEÑO
+# -----------------------------
+apply_skin()
+hero_header()
+
+# -----------------------------
+# CACHE LLM
+# -----------------------------
+@st.cache_resource
+def cached_llm():
+    return get_llm()
+
+RESUMEN_PROMPT = get_prompt_summary_str()
+llm = cached_llm()
+
+# -----------------------------
+# ESTADO
+# -----------------------------
+if "multi_resumenes" not in st.session_state:
+    st.session_state.multi_resumenes = {}
+
+# -----------------------------
+# UI MULTIPDF (sin cards, con pad-block)
+# -----------------------------
+section_title("1. Cargar uno o varios documentos PDF")
+pad_start()
+uploaded_files = st.file_uploader(
+    "Selecciona uno o más archivos PDF",
+    type="pdf",
+    accept_multiple_files=True,
+    key="multi_pdf_upload",
+    help="Arrastra y suelta tus PDFs o haz clic para seleccionarlos.",
+)
+pad_end()
+
+if uploaded_files:
+    progress = st.progress(0, text="Procesando documentos...")
+    total = len(uploaded_files)
+    for idx, archivo in enumerate(uploaded_files, start=1):
+        nombre = archivo.name
+        if nombre not in st.session_state.multi_resumenes:
+            st.info(f"Procesando documento: **{nombre}**")
+            docs = extract_text_from_pdf_bytes(archivo.getvalue(), nombre)
+            if docs:
+                resumen = resumen_documento(docs, llm, RESUMEN_PROMPT)
+            else:
+                resumen = "Documento vacío o no legible."
+            st.session_state.multi_resumenes[nombre] = resumen
+        progress.progress(int(idx / total * 100), text=f"Procesado {idx} de {total}")
+
+    section_title("2. Resúmenes Generados")
+    for nombre, resumen in st.session_state.multi_resumenes.items():
+        pad_start()
+        with st.expander(f"Resumen de {nombre}", expanded=False):
+            st.markdown(resumen)
+        pad_end()
+
+    st.divider()
+    if st.button("Limpiar todos los resúmenes"):
+        st.session_state.multi_resumenes = {}
+        st.success("Se limpiaron los resúmenes generados.")
+else:
+    pad_start()
+    st.info("Por favor, sube uno o más archivos PDF para analizarlos y obtener sus resúmenes.")
+    pad_end()
+
+# -----------------------------
+# FOOTER
+# -----------------------------
+footer_corp()
