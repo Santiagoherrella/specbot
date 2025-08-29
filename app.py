@@ -7,7 +7,7 @@ import streamlit as st
 # ====== TUS IMPORTS EXISTENTES ======
 from corelogic import get_llm
 from utils import extract_text_from_pdf_bytes, resumen_documento
-from prompts import get_prompt_summary_str
+from promots import get_prompt_summary_str
 # ====================================
 
 # -----------------------------
@@ -117,3 +117,4 @@ def apply_skin():
           font-weight: 700; 
           margin: 18px 0 10px 0;
         }}
+
