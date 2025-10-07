@@ -41,13 +41,8 @@ def get_llm():
             temperature=TEMPERATURE,
             google_api_key=api_key
         )
-    elif LLM_PROVIDER == "grok":
-        key = st.secrets["XaI"]
-        return ChatXAI(
-            model=LLM_MODEL,
-            api_key=key,
-        )
     else:
         raise ValueError(f"Proveedor de LLM no soportado: {LLM_PROVIDER}")
+
 
 
