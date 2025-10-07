@@ -1,9 +1,10 @@
 {
-    "llm_provider": "gemini",
-    "llm_model": "gemini-2.5-pro",
+    "llm_provider": "grok",
+    "llm_model": "grok-4-fast-non-reasoning",
     "temperature": 0.3
   }
 
   
+
 
 
