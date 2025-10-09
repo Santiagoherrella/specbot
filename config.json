@@ -1,12 +1,13 @@
 {
   {
     "llm_provider": "openai",
-    "llm_model": "gpt-5-nano-2025-08-07",
+    "llm_model": "gpt-4.1-nano-2025-04-14",
     "temperature": 0.3
   }
   }
 
   
+
 
 
 
