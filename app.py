@@ -218,6 +218,23 @@ def main():
                 st.write(f"{i}. **{file.name}** ({file.size / 1024:.1f} KB)")
 
         st.markdown("---")
+        # Mostrar resumen si existe en session_state
+    if "ultimo_resumen" in st.session_state and st.session_state.ultimo_resumen:
+        st.success("✅ ¡Resumen generado exitosamente!")
+        st.markdown("---")
+        st.markdown("## 📊 Resumen Ejecutivo")
+    
+    with st.container():
+        st.markdown(st.session_state.ultimo_resumen)
+    
+    # Botón de descarga (ahora desde session_state)
+    st.download_button(
+        label="📥 Descargar Resumen (.txt)",
+        data=st.session_state.ultimo_resumen,
+        file_name=f"resumen_{st.session_state.nombre_pdfs.replace(', ', '_')}_{time.strftime('%Y%m%d_%H%M%S')}.txt",
+        mime="text/plain",
+        key="btn_download"
+    )
 
         # BOTÓN MANUAL PARA PROCESAR
         if st.button("🔄 Procesar PDFs y Generar Resumen", use_container_width=True, type="primary", key="btn_process"):
@@ -253,12 +270,16 @@ def main():
 
                 resumen = resumen_documento(all_docs, llm, prompt_summary)
 
+                st.session_state.ultimo_resumen = resumen  # Guardamos el resumen
+                st.session_state.ultimo_pdf = ", ".join([f.name for f in uploaded_files])  # Nombre(s) del PDF
+
                 progress_bar.progress(100)
                 status_text.empty()
                 progress_bar.empty()
 
                 # Mostrar resultado
                 st.success("✅ ¡Resumen generado exitosamente!")
+                st.rerun()  # ← Recarga para mostrar desde session_state
                 st.markdown("---")
                 st.markdown("## 📊 Resumen Ejecutivo")
 
@@ -308,5 +329,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
