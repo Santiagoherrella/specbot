@@ -172,7 +172,7 @@ def main():
         hero_header(
             title="Analizador MultiPDF con IA",
             subtitle="Sistema de análisis de pliegos técnicos - Magnetron S.A.S.",
-            show_logo=False  # No mostrar logo aquí porque lo mostramos abajo más grande
+            show_logo=True  # No mostrar logo aquí porque lo mostramos abajo más grande
         )
         login_screen()
         return
@@ -308,4 +308,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
