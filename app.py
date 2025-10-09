@@ -237,7 +237,7 @@ def main():
     )
 
         # BOTÓN MANUAL PARA PROCESAR
-        if st.button("🔄 Procesar PDFs y Generar Resumen", use_container_width=True, type="primary", key="btn_process"):
+    if st.button("🔄 Procesar PDFs y Generar Resumen", use_container_width=True, type="primary", key="btn_process"):
 
             progress_bar = st.progress(0)
             status_text = st.empty()
@@ -329,6 +329,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
