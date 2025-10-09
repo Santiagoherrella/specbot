@@ -15,14 +15,13 @@ from promots import get_prompt_summary_str
 # CONFIGURACIÓN BÁSICA PÁGINA
 # -----------------------------
 ASSETS = Path("assets")
-HERO_PATH = ASSETS / "banner.png"   # opcional; si no existe, usa color corporativo
-LOGO =  ASSETS / "logo.png" 
+HERO_PATH = ASSETS / "banner.png"
+LOGO = ASSETS / "logo.png"
 CORP = "#0f6db4"
 
 st.set_page_config(
-    page_title="Analizador MultiPDF IA",
-    page_icon=LOGO,
-    
+    page_title="Analizador MultiPDF IA - Magnetron",
+    page_icon=str(LOGO) if LOGO.exists() else "📄",
     layout="wide",
 )
 
@@ -35,233 +34,278 @@ def _b64(path: Path):
     return ""
 
 def apply_skin():
-    """
-    Tema adaptable Light/Dark (sin forzarlo), header fijo,
-    subheaders en blanco y st.info en blanco con buen contraste.
-    Sin 'cards'; solo pad-block para conservar espacios.
-    """
     hero_bg = _b64(HERO_PATH)
-
     st.markdown(
         f"""
         <style>
-        /* Tipografía global */
-        * {{ font-family: Verdana, sans-serif !important; }}
-
-        /* Variables por defecto (modo claro) */
-        :root {{
-          --corp: {CORP};
-          --text: #0f172a;           /* texto principal */
-          --bg:   #f8fafc;           /* fondo general */
-          --surface: #ffffff;        /* superficies claras */
-          --muted: #475569;          /* texto secundario */
-          --border: #e5e7eb;         /* bordes suaves */
+        /* Header fijo */
+        [data-testid="stHeader"] {{
+            background-color: {CORP};
+            height: 3.5rem;
         }}
 
-        /* Overrides modo oscuro */
-        .stApp[data-theme="dark"] :root {{
-          --text:   #e5e7eb;
-          --bg:     #0b1220;
-          --surface:#0f1523;         /* NO todo blanco; buen contraste */
-          --muted:  #cbd5e1;
-          --border: #1f2937;
-        }}
-
-        .stApp {{ background: var(--bg); color: var(--text); }}
-
-        /* HERO (sin transparencia) */
-        .hero {{
-          position: relative;
-          margin: 12px 0 18px 0;
-          border-radius: 16px;
-          overflow: hidden;
-          min-height: 100px;
-          box-shadow: 0 6px 18px rgba(0,0,0,.08);
-          background: var(--corp);
-        }}
-        .hero-bg {{
-          position:absolute; inset:0;
-          {"background: url('data:image/jpg;base64,"+hero_bg+"') center/cover no-repeat;" if hero_bg else "background: var(--corp);"}
-        }}
-        .hero-content {{
-          position: relative; z-index: 1; color: #fff;
-          display:flex; align-items:center; gap:10px; padding:14px 18px;
-        }}
-        /* Icono documento (emoji) — AJUSTA AQUÍ EL TAMAÑO */
-        .doc-emoji {{
-          font-size: 2.4rem !important;   /* <-- sube/baja este valor */
-          line-height: 1;
-          margin-right: 8px;
-        }}
-        /* Título header — AJUSTA AQUÍ EL TAMAÑO */
-        .hero-title {{
-          margin: 0 !important;
-          font-weight: 700 !important;
-          line-height: 1.05 !important;
-          font-size: 2rem !important;     /* <-- sube/baja este valor */
-        }}
-        .hero-sub {{
-          margin: 4px 0 0 0;
-          font-size: .82rem;
-          opacity: .95;
-        }}
-
-        /* Subheaders estilo “chip” blanco (también en dark) */
-        .section-title {{
-          display: inline-block;
-          padding: 6px 12px;
-          background: #ffffff;       /* blanco siempre */
-          color: #0f172a;            /* texto oscuro para legibilidad */
-          border-left: 6px solid var(--corp);
-          border-radius: 10px;
-          font-size: 0.98rem; 
-          font-weight: 700; 
-          margin: 18px 0 10px 0;
-        }}
-
-        /* Bloques solo para ESPACIAR (sin card) */
-        .pad-block {{
-          padding: 14px;
-          margin-bottom: 14px;
-        }}
-
-        /* Personalizar st.info para que sea BLANCO en ambos modos */
-        .stAlert div[role="alert"] {{
-          background: #ffffff !important;
-          color: #0f172a !important;
-          border: 1px solid var(--border) !important;
-          border-radius: 12px !important;
-        }}
-
-        /* Inputs con bordes suaves y radio leve */
-        .stTextInput > div > div > input,
-        .stTextArea textarea,
-        .stSelectbox > div > div,
-        .stDateInput > div > div > input {{
-          border-radius: 8px !important;
+        /* Subheaders en blanco */
+        .stMarkdown h3, .stMarkdown h2 {{
+            color: white !important;
         }}
 
         /* Botones corporativos */
-        .stButton > button {{
-          background: var(--corp) !important;
-          color:#fff !important;
-          border-radius: 10px !important;
-          border: none !important;
-          font-weight:700 !important;
+        .stButton>button {{
+            background-color: {CORP};
+            color: white;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            border: none;
+            font-weight: 600;
         }}
-        .stButton > button:hover {{ filter: brightness(.95); }}
-        
-        /* Footer */
-        .corp-footer {{
-          position: fixed; left: 0; right: 0; bottom: 0;
-          background: var(--corp); color: #fff;
-          padding: 10px 16px; text-align: center; font-size: .9rem; z-index: 1000;
+        .stButton>button:hover {{
+            background-color: #0a5690;
         }}
 
-        
+        /* File uploader */
+        [data-testid="stFileUploader"] {{
+            border: 2px dashed {CORP};
+            border-radius: 10px;
+            padding: 1rem;
+        }}
 
+        /* Logo styling */
+        .logo-img {{
+            max-height: 60px;
+            width: auto;
+            margin-bottom: 1rem;
+        }}
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-def hero_header(title="Analizador y Resumidor MultiPDF con IA", subtitle=None):
+def hero_header(title="Analizador y Resumidor MultiPDF con IA", subtitle=None, show_logo=True):
     if subtitle is None:
         subtitle = f"Hora actual: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+
+    # Si existe el logo, mostrarlo en el header
+    logo_html = ""
+    if show_logo and LOGO.exists():
+        logo_b64 = _b64(LOGO)
+        logo_html = f'<img src="data:image/png;base64,{logo_b64}" class="logo-img" />'
+
     st.markdown(
         f"""
-        <div class="hero">
-          <div class="hero-bg"></div>
-          <div class="hero-content">
-             <span class="doc-emoji" aria-hidden="true">📄</span>
-             <div>
-               <!-- OJO: usamos DIV (no h1) para que el tamaño respete tu CSS -->
-               <div class="hero-title">{title}</div>
-               <div class="hero-sub">{subtitle}</div>
-             </div>
-          </div>
+        <div class="hero-container" style="
+            background: linear-gradient(135deg, {CORP} 0%, #0a5690 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+        ">
+            {logo_html}
+            <h1 style="color: white; margin: 0;">📄 {title}</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 0.5rem;">{subtitle}</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-def section_title(txt: str):
-    st.markdown(f'<div class="section-title">{txt}</div>', unsafe_allow_html=True)
-
-def pad_start(): st.markdown('<div class="pad-block">', unsafe_allow_html=True)
-def pad_end():   st.markdown('</div>', unsafe_allow_html=True)
-
-def footer_corp():
-    st.markdown('<div class="corp-footer">© MAGNETRON SAS 2025</div>', unsafe_allow_html=True)
-
 # -----------------------------
-# APLICAR DISEÑO
+# SISTEMA DE LOGIN
 # -----------------------------
-apply_skin()
-hero_header()
+def login_screen():
+    # Logo en la pantalla de login
+    if LOGO.exists():
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col2:
+            logo_b64 = _b64(LOGO)
+            st.markdown(
+                f"""
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <img src="data:image/png;base64,{logo_b64}" style="max-width: 200px; width: 100%;" />
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
-# -----------------------------
-# CACHE LLM
-# -----------------------------
-@st.cache_resource
-def cached_llm():
-    return get_llm()
+    st.markdown(
+        f"""
+        <div style="text-align: center; padding: 1rem 0;">
+            <h2 style="color: {CORP};">🔐 Iniciar Sesión</h2>
+            <p style="color: #666;">Ingresa tu nombre para continuar</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-RESUMEN_PROMPT = get_prompt_summary_str()
-llm = cached_llm()
+    col1, col2, col3 = st.columns([1, 2, 1])
 
-# -----------------------------
-# ESTADO
-# -----------------------------
-if "multi_resumenes" not in st.session_state:
-    st.session_state.multi_resumenes = {}
+    with col2:
+        nombre_usuario = st.text_input(
+            "Nombre completo",
+            placeholder="Ej: Juan Pérez",
+            key="login_nombre"
+        )
 
-# -----------------------------
-# UI MULTIPDF (sin cards, con pad-block)
-# -----------------------------
-section_title("1. Cargar uno o varios documentos PDF")
-pad_start()
-uploaded_files = st.file_uploader(
-    "Selecciona uno o más archivos PDF",
-    type="pdf",
-    accept_multiple_files=True,
-    key="multi_pdf_upload",
-    help="Arrastra y suelta tus PDFs o haz clic para seleccionarlos.",
-)
-pad_end()
+        st.markdown("<br>", unsafe_allow_html=True)
 
-if uploaded_files:
-    progress = st.progress(0, text="Procesando documentos...")
-    total = len(uploaded_files)
-    for idx, archivo in enumerate(uploaded_files, start=1):
-        nombre = archivo.name
-        if nombre not in st.session_state.multi_resumenes:
-            st.info(f"Procesando documento: **{nombre}**")
-            docs = extract_text_from_pdf_bytes(archivo.getvalue(), nombre)
-            if docs:
-                resumen = resumen_documento(docs, llm, RESUMEN_PROMPT)
+        if st.button("🚀 Ingresar", use_container_width=True, key="btn_login"):
+            if nombre_usuario and nombre_usuario.strip():
+                st.session_state.logged_in = True
+                st.session_state.usuario = nombre_usuario.strip()
+                st.rerun()
             else:
-                resumen = "Documento vacío o no legible."
-            st.session_state.multi_resumenes[nombre] = resumen
-        progress.progress(int(idx / total * 100), text=f"Procesado {idx} de {total}")
-
-    section_title("2. Resúmenes Generados")
-    for nombre, resumen in st.session_state.multi_resumenes.items():
-        pad_start()
-        with st.expander(f"Resumen de {nombre}", expanded=False):
-            st.markdown(resumen)
-        pad_end()
-
-    st.divider()
-    if st.button("Limpiar todos los resúmenes"):
-        st.session_state.multi_resumenes = {}
-        st.success("Se limpiaron los resúmenes generados.")
-else:
-    pad_start()
-    st.info("Por favor, sube uno o más archivos PDF para analizarlos y obtener sus resúmenes.")
-    pad_end()
+                st.error("⚠️ Por favor ingresa tu nombre")
 
 # -----------------------------
-# FOOTER
+# FUNCIÓN PRINCIPAL
 # -----------------------------
-footer_corp()
+def main():
+    # Inicializar session_state
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = False
+    if "usuario" not in st.session_state:
+        st.session_state.usuario = ""
+
+    # Aplicar estilos
+    apply_skin()
+
+    # Si no está logueado, mostrar login
+    if not st.session_state.logged_in:
+        hero_header(
+            title="Analizador MultiPDF con IA",
+            subtitle="Sistema de análisis de pliegos técnicos - Magnetron S.A.S.",
+            show_logo=False  # No mostrar logo aquí porque lo mostramos abajo más grande
+        )
+        login_screen()
+        return
+
+    # --- USUARIO LOGUEADO ---
+    hero_header(
+        title="Analizador MultiPDF con IA",
+        subtitle=f"Usuario: {st.session_state.usuario} | {time.strftime('%Y-%m-%d %H:%M:%S')}",
+        show_logo=True
+    )
+
+    # Botón de cerrar sesión en la esquina
+    col1, col2 = st.columns([6, 1])
+    with col2:
+        if st.button("🚪 Salir", key="btn_logout"):
+            st.session_state.logged_in = False
+            st.session_state.usuario = ""
+            st.rerun()
+
+    st.markdown("---")
+
+    # Descripción
+    st.info(
+        "📋 **Sube uno o varios pliegos en PDF** y genera un **Resumen Ejecutivo** "
+        "detallado con información técnica clave y tablas listas para Excel."
+    )
+
+    # Subida de archivos
+    uploaded_files = st.file_uploader(
+        "🗂️ Arrastra o selecciona tus archivos PDF",
+        type=["pdf"],
+        accept_multiple_files=True,
+        help="Puedes subir múltiples PDFs a la vez",
+        key="file_uploader"
+    )
+
+    if uploaded_files:
+        st.success(f"✅ {len(uploaded_files)} archivo(s) cargado(s)")
+
+        # Mostrar lista de archivos
+        with st.expander("📄 Ver archivos cargados"):
+            for i, file in enumerate(uploaded_files, 1):
+                st.write(f"{i}. **{file.name}** ({file.size / 1024:.1f} KB)")
+
+        st.markdown("---")
+
+        # BOTÓN MANUAL PARA PROCESAR
+        if st.button("🔄 Procesar PDFs y Generar Resumen", use_container_width=True, type="primary", key="btn_process"):
+
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+
+            try:
+                # Paso 1: Cargar LLM
+                status_text.text("⚙️ Inicializando modelo de IA...")
+                progress_bar.progress(20)
+                llm = get_llm()
+                prompt_summary = get_prompt_summary_str()
+
+                # Paso 2: Procesar PDFs
+                status_text.text("📄 Extrayendo texto de los PDFs...")
+                progress_bar.progress(40)
+
+                all_docs = []
+                for idx, uploaded_file in enumerate(uploaded_files):
+                    file_bytes = uploaded_file.read()
+                    docs = extract_text_from_pdf_bytes(file_bytes, uploaded_file.name)
+                    all_docs.extend(docs)
+                    progress_bar.progress(40 + (idx + 1) * (30 // len(uploaded_files)))
+
+                if not all_docs:
+                    st.error("❌ No se pudo extraer texto de los PDFs.")
+                    return
+
+                # Paso 3: Generar resumen
+                status_text.text(f"🤖 Generando resumen de {len(all_docs)} página(s)...")
+                progress_bar.progress(70)
+
+                resumen = resumen_documento(all_docs, llm, prompt_summary)
+
+                progress_bar.progress(100)
+                status_text.empty()
+                progress_bar.empty()
+
+                # Mostrar resultado
+                st.success("✅ ¡Resumen generado exitosamente!")
+                st.markdown("---")
+                st.markdown("## 📊 Resumen Ejecutivo")
+
+                # Contenedor con el resumen
+                with st.container():
+                    st.markdown(resumen)
+
+                # Botón de descarga
+                st.download_button(
+                    label="📥 Descargar Resumen (.txt)",
+                    data=resumen,
+                    file_name=f"resumen_ejecutivo_{time.strftime('%Y%m%d_%H%M%S')}.txt",
+                    mime="text/plain",
+                    key="btn_download"
+                )
+
+            except Exception as e:
+                st.error(f"❌ Error al procesar: {str(e)}")
+                import traceback
+                with st.expander("🔍 Ver detalles del error"):
+                    st.code(traceback.format_exc())
+    else:
+        st.warning("⬆️ Sube al menos un archivo PDF para comenzar")
+
+    # Footer con logo pequeño
+    st.markdown("---")
+    if LOGO.exists():
+        col1, col2, col3 = st.columns([2, 1, 2])
+        with col2:
+            logo_b64 = _b64(LOGO)
+            st.markdown(
+                f'''
+                <div style="text-align: center;">
+                    <img src="data:image/png;base64,{logo_b64}" style="max-width: 80px; opacity: 0.7;" />
+                    <p style="color: #888; font-size: 0.9rem; margin-top: 0.5rem;">
+                        Magnetron S.A.S. | Analizador v2.0
+                    </p>
+                </div>
+                ''',
+                unsafe_allow_html=True
+            )
+    else:
+        st.markdown(
+            '<p style="text-align: center; color: #888;">Magnetron S.A.S. | Analizador de Pliegos Técnicos v2.0</p>',
+            unsafe_allow_html=True
+        )
+
+if __name__ == "__main__":
+    main()
+
