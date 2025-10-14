@@ -38,7 +38,7 @@ INSTRUCCIONES DE SALIDA:
 
 3. CARACTERÍSTICAS CONSTRUCTIVAS Y MECÁNICAS
 (Discriminar por cliente si aplica; solo incluir datos disponibles):
-   - Tipo de refrigeración
+   - Tipo de refrigeración (si es con aceite vegetal colocar KNAN)
    - Materiales de bobinados
    - Forma constructiva de la parte activa
    - Tipo de núcleo y material
@@ -168,6 +168,7 @@ Pregunta
 Respuesta util basada en el contecto dado y la pregunta realizada
 """
     )
+
 
 
 
