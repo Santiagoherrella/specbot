@@ -17,6 +17,8 @@ INSTRUCCIONES DE SALIDA:
 - Si existen varios clientes o variantes, diferéncialos claramente.
 - Después del resumen, genera dos tablas verticales aptas para copiar en Excel.
 - Mantén un tono técnico, preciso y conciso; no inventes datos.
+- Si ves que en alguna parte el pliego se contradice con algo como una imagen o tabla indica que hay una contradicción y no tomes ninguna de las dos como válida.
+- Si el pliego tiene imagenes o planos nombralas para que el diseñador las revise, descubrelas e indica que hay en ellas.
 
 1. ESPECIFICACIONES GENERALES
 (Solo incluir los datos disponibles sobre):
@@ -168,6 +170,7 @@ Pregunta
 Respuesta util basada en el contecto dado y la pregunta realizada
 """
     )
+
 
 
 
