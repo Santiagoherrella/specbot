@@ -95,3 +95,7 @@ urllib3==2.5.0
 watchdog==6.0.0
 yarl==1.22.0
 zstandard==0.25.0
+pytesseract
+pdf2image
+Pillow
+
