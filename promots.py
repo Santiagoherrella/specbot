@@ -12,7 +12,6 @@ INSTRUCCIONES DE SALIDA:
 - Sigue exactamente el índice de secciones (1-9) mostrado más abajo.
 - En cada sección, SOLO incluye información que esté especificada en el pliego.
 - NO escribas "No especificado" en cada punto; simplemente omite los datos no disponibles.
-- Al final del documento, crea una sección 10 llamada "ASPECTOS NO ESPECIFICADOS" que liste brevemente qué información falta.
 - Incluye valores numéricos concretos con sus unidades.
 - Si existen varios clientes o variantes, diferéncialos claramente.
 - Después del resumen, genera dos tablas verticales aptas para copiar en Excel.
@@ -103,10 +102,6 @@ INSTRUCCIONES DE SALIDA:
    - Planos requeridos
    - Pruebas específicas
    - Declaración de pérdidas
-
-10. ASPECTOS NO ESPECIFICADOS EN EL PLIEGO
-Listar brevemente qué información relevante no fue proporcionada en el documento, agrupada por categoría (eléctrica, mecánica, accesorios, normativa, etc.).
-
 ---
 
 Tabla #1 – Parámetros Eléctricos (FORMATO VERTICAL)
@@ -170,6 +165,7 @@ Pregunta
 Respuesta util basada en el contecto dado y la pregunta realizada
 """
     )
+
 
 
 
