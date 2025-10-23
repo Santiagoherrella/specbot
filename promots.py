@@ -14,10 +14,45 @@ INSTRUCCIONES DE SALIDA:
 - NO escribas "No especificado" en cada punto; simplemente omite los datos no disponibles.
 - Incluye valores numéricos concretos con sus unidades.
 - Si existen varios clientes o variantes, diferéncialos claramente.
-- Después del resumen, genera dos tablas verticales aptas para copiar en Excel.
+- Genera dos tablas verticales aptas para copiar en Excel y luego el resumen,.
 - Mantén un tono técnico, preciso y conciso; no inventes datos.
 - Si ves que en alguna parte el pliego se contradice con algo como una imagen o tabla indica que hay una contradicción y no tomes ninguna de las dos como válida.
 - Si el pliego tiene imagenes o planos nombralas para que el diseñador las revise, descubrelas e indica que hay en ellas.
+
+Tabla #1 – Parámetros Eléctricos (FORMATO VERTICAL)
+Campo | Valor
+Compañía | Magnetron S.A.S.
+Especificaciones del cliente | [Nombre del pliego y código]
+Normas | [Normas de manufactura]
+Tipos de transformador | [Tipos incluidos]
+Potencias (kVA/MVA) | [Potencias]
+Fases | [Fases]
+Tipo de refrigeración | [Según pliego]
+Polaridad / Grupo de conexión | [Según pliego]
+Voltaje primario (kV) | [Según pliego]
+BIL primario (kV) | [Según pliego]
+Voltaje secundario (kV) | [Según pliego]
+BIL secundario (kV) | [Según pliego]
+Frecuencia (Hz) | [Según pliego]
+Eficiencia requerida | [Según pliego o N/A]
+Pérdidas con carga (W) | [Según pliego o N/A]
+Pérdidas sin carga (W) | [Según pliego o N/A]
+Impedancia (%) | [Según pliego]
+Corriente de excitación (%) | [Según pliego]
+
+Tabla #2 – Accesorios (FORMATO VERTICAL)
+Accesorio | Características
+Terminal de baja tensión | [Según pliego o N/A]
+Terminal de alta tensión | [Según pliego o N/A]
+Conmutador | [Según pliego o N/A]
+Seccionador | [Según pliego o N/A]
+Pararrayos | [Según pliego o N/A]
+Fusibles | [Según pliego o N/A]
+Termómetro | [Según pliego o N/A]
+Nivel de aceite | [Según pliego o N/A]
+Medidor de presión y/o vacío | [Según pliego o N/A]
+Válvulas | [Según pliego o N/A]
+Otros accesorios | [Listar o N/A]
 
 1. ESPECIFICACIONES GENERALES
 (Solo incluir los datos disponibles sobre):
@@ -103,42 +138,6 @@ INSTRUCCIONES DE SALIDA:
    - Pruebas específicas
    - Declaración de pérdidas
 ---
-
-Tabla #1 – Parámetros Eléctricos (FORMATO VERTICAL)
-Campo | Valor
-Compañía | Magnetron S.A.S.
-Especificaciones del cliente | [Nombre del pliego y código]
-Normas | [Normas de manufactura]
-Tipos de transformador | [Tipos incluidos]
-Potencias (kVA/MVA) | [Potencias]
-Fases | [Fases]
-Tipo de refrigeración | [Según pliego]
-Polaridad / Grupo de conexión | [Según pliego]
-Voltaje primario (kV) | [Según pliego]
-BIL primario (kV) | [Según pliego]
-Voltaje secundario (kV) | [Según pliego]
-BIL secundario (kV) | [Según pliego]
-Frecuencia (Hz) | [Según pliego]
-Eficiencia requerida | [Según pliego o N/A]
-Pérdidas con carga (W) | [Según pliego o N/A]
-Pérdidas sin carga (W) | [Según pliego o N/A]
-Impedancia (%) | [Según pliego]
-Corriente de excitación (%) | [Según pliego]
-
-Tabla #2 – Accesorios (FORMATO VERTICAL)
-Accesorio | Características
-Terminal de baja tensión | [Según pliego o N/A]
-Terminal de alta tensión | [Según pliego o N/A]
-Conmutador | [Según pliego o N/A]
-Seccionador | [Según pliego o N/A]
-Pararrayos | [Según pliego o N/A]
-Fusibles | [Según pliego o N/A]
-Termómetro | [Según pliego o N/A]
-Nivel de aceite | [Según pliego o N/A]
-Medidor de presión y/o vacío | [Según pliego o N/A]
-Válvulas | [Según pliego o N/A]
-Otros accesorios | [Listar o N/A]
-
 Documento del Cliente (Pliego): {document_text}
 
 Resumen profesional (en ESPAÑOL):
@@ -165,6 +164,7 @@ Pregunta
 Respuesta util basada en el contecto dado y la pregunta realizada
 """
     )
+
 
 
 
