@@ -301,13 +301,15 @@ def main():
     # ----------------------------- 
 # BOTÓN DE FEEDBACK FLOTANTE
 # ----------------------------- 
+# ----------------------------- 
+# BOTÓN DE FEEDBACK FLOTANTE
+# ----------------------------- 
 def render_feedback_button():
-    """Renderiza botón flotante que abre Google Forms para feedback"""
+    """Renderiza botón flotante que abre Forms para feedback"""
     
-    # URL de tu Google Forms (reemplaza con tu link real)
-    GOOGLE_FORMS_URL = "https://forms.gle/TU_LINK_AQUI"
+    # URL de tu Microsoft Forms
+    FORMS_URL = "https://forms.office.com/r/yLAnpwJw1V"
     
-    # CSS para el botón flotante
     st.markdown("""
     <style>
     .feedback-float-container {
@@ -327,23 +329,15 @@ def render_feedback_button():
         box-shadow: 0 4px 15px rgba(15, 109, 180, 0.4);
         cursor: pointer;
         transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 10px;
         text-decoration: none;
     }
     .feedback-float-btn:hover {
         transform: translateY(-3px);
         box-shadow: 0 6px 20px rgba(15, 109, 180, 0.5);
-        background: linear-gradient(135deg, #1a8fd9 0%, #0f6db4 100%);
-    }
-    .feedback-float-btn:active {
-        transform: translateY(-1px);
     }
     </style>
     """, unsafe_allow_html=True)
     
-    # Botón HTML con link directo
     st.markdown(f"""
     <div class="feedback-float-container">
         <a href="{https://forms.office.com/r/yLAnpwJw1V}" target="_blank" class="feedback-float-btn">
@@ -352,11 +346,12 @@ def render_feedback_button():
     </div>
     """, unsafe_allow_html=True)
 
-# Llamar la función para mostrar el botón
 render_feedback_button()
+
 
 
 if __name__ == "__main__":
     main()
+
 
 
