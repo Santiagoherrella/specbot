@@ -315,7 +315,7 @@ def render_feedback_button():
     .feedback-float-container {
         position: fixed;
         bottom: 20px;
-        right: 20px;
+        left: 20px;
         z-index: 999;
     }
     .feedback-float-btn {
@@ -352,6 +352,7 @@ render_feedback_button()
 
 if __name__ == "__main__":
     main()
+
 
 
 
