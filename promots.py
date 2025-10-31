@@ -19,6 +19,91 @@ INSTRUCCIONES DE SALIDA:
 - Si ves que en alguna parte el pliego se contradice con algo como una imagen o tabla indica que hay una contradicción y no tomes ninguna de las dos como válida.
 - Si el pliego tiene imagenes o planos nombralas para que el diseñador las revise, descubrelas e indica que hay en ellas.
 
+1. ESPECIFICACIONES GENERALES
+(Solo incluir los datos disponibles sobre):
+   - Tipo de transformador(es) requerido(s)
+   - Capacidad(es) nominal(es) en kVA o MVA
+   - Aplicación y entorno de instalación
+   - Altitud, temperatura ambiente y condiciones especiales
+   - Condiciones de servicio
+
+2. PARÁMETROS ELÉCTRICOS
+(Solo incluir los datos disponibles sobre):
+   - Voltajes nominales (primario/secundario) y configuración
+   - Frecuencia de operación
+   - Grupo de conexión
+   - Impedancia de cortocircuito (%)
+   - Regulación de tensión (taps)
+   - Nivel de pérdidas máximas permitidas. (si es doble voltaje cual de los voltages debe de cumplir estas)
+   - BIL (Nivel Básico de Aislamiento)
+
+3. CARACTERÍSTICAS CONSTRUCTIVAS Y MECÁNICAS
+(Discriminar por cliente si aplica; solo incluir datos disponibles):
+   - Tipo de refrigeración (si es con aceite vegetal colocar KNAN)
+   - Materiales de bobinados
+   - Forma constructiva de la parte activa
+   - Tipo de núcleo y material
+   - Sistema de aislamiento
+   - Aceite o fluido dieléctrico
+   - Características del tanque
+   - Sistemas de sellado
+   - Requisitos sísmicos
+   - Dimensiones y peso límites
+   - Radiadores y sistemas de enfriamiento
+
+4. SISTEMA DE PINTURA Y TRATAMIENTO SUPERFICIAL
+(Solo incluir datos disponibles):
+   - Preparación superficial requerida
+   - Tipo de pintura base y acabado
+   - Espesor mínimo de película seca
+   - Color RAL especificado
+   - Requisitos de resistencia a corrosión
+   - Tratamientos especiales
+
+5. ACCESORIOS Y COMPONENTES
+(Mencionar marcas específicas o restricciones; solo incluir datos disponibles):
+   - Equipamiento de protección
+   - Cambiadores de tensión o conmutadores
+   - Aisladores de alta tensión (Dependiendiendo del amperaje)
+   - Aisladres de baja tensión (cantidad de perforaciones en los aisladores de baja tension por potencia)
+   - Sistemas de monitoreo
+   - Gabinetes/cajas de conexión
+   - Accesorios especiales
+   - Válvulas y dispositivos de alivio
+   - Sistemas de puesta a tierra
+
+6. NORMATIVA Y CERTIFICACIONES
+(Listar SOLO las normas mencionadas explícitamente):
+   - Estándares aplicables con número y título completo
+   - Tipo de norma (diseño, fabricación, ensayo, producto)
+   - Pruebas y ensayos requeridos
+   - Certificaciones exigidas
+   - Requisitos sísmicos específicos
+   - Normativa para materiales específicos
+
+7. IDENTIFICACIÓN, ROTULADO Y DOCUMENTACIÓN
+(Solo incluir datos disponibles):
+   - Requisitos de placas de características. (cantidad y cuando estas son abligatorias)
+   - Etiquetado y marcación especial
+   - Documentación técnica requerida
+   - Planos y manuales solicitados
+   - Idioma para documentación
+
+8. EMBALAJE Y TRANSPORTE
+(Solo incluir datos disponibles):
+   - Tipo de embalaje requerido
+   - Materiales específicos
+   - Requisitos de preservación
+   - Condiciones de transporte
+   - Documentación para exportación
+   - Preparación para manejo
+
+9. ENTREGABLES DE LA OFERTA
+(Solo incluir datos disponibles):
+   - Planos requeridos
+   - Pruebas específicas
+   - Declaración de pérdidas
+---
 Tabla #1 – Parámetros Eléctricos (FORMATO VERTICAL)
 Campo | Valor
 Compañía | Magnetron S.A.S.
@@ -53,91 +138,6 @@ Nivel de aceite | [Según pliego o N/A]
 Medidor de presión y/o vacío | [Según pliego o N/A]
 Válvulas | [Según pliego o N/A]
 Otros accesorios | [Listar o N/A]
-
-1. ESPECIFICACIONES GENERALES
-(Solo incluir los datos disponibles sobre):
-   - Tipo de transformador(es) requerido(s)
-   - Capacidad(es) nominal(es) en kVA o MVA
-   - Aplicación y entorno de instalación
-   - Altitud, temperatura ambiente y condiciones especiales
-   - Condiciones de servicio
-
-2. PARÁMETROS ELÉCTRICOS
-(Solo incluir los datos disponibles sobre):
-   - Voltajes nominales (primario/secundario) y configuración
-   - Frecuencia de operación
-   - Grupo de conexión
-   - Impedancia de cortocircuito (%)
-   - Regulación de tensión (taps)
-   - Nivel de pérdidas máximas permitidas
-   - BIL (Nivel Básico de Aislamiento)
-
-3. CARACTERÍSTICAS CONSTRUCTIVAS Y MECÁNICAS
-(Discriminar por cliente si aplica; solo incluir datos disponibles):
-   - Tipo de refrigeración (si es con aceite vegetal colocar KNAN)
-   - Materiales de bobinados
-   - Forma constructiva de la parte activa
-   - Tipo de núcleo y material
-   - Sistema de aislamiento
-   - Aceite o fluido dieléctrico
-   - Características del tanque
-   - Sistemas de sellado
-   - Requisitos sísmicos
-   - Dimensiones y peso límites
-   - Radiadores y sistemas de enfriamiento
-
-4. SISTEMA DE PINTURA Y TRATAMIENTO SUPERFICIAL
-(Solo incluir datos disponibles):
-   - Preparación superficial requerida
-   - Tipo de pintura base y acabado
-   - Espesor mínimo de película seca
-   - Color RAL especificado
-   - Requisitos de resistencia a corrosión
-   - Tratamientos especiales
-
-5. ACCESORIOS Y COMPONENTES
-(Mencionar marcas específicas o restricciones; solo incluir datos disponibles):
-   - Equipamiento de protección
-   - Cambiadores de tensión o conmutadores
-   - Aisladores de alta y baja tensión
-   - Sistemas de monitoreo
-   - Gabinetes/cajas de conexión
-   - Accesorios especiales
-   - Válvulas y dispositivos de alivio
-   - Sistemas de puesta a tierra
-
-6. NORMATIVA Y CERTIFICACIONES
-(Listar SOLO las normas mencionadas explícitamente):
-   - Estándares aplicables con número y título completo
-   - Tipo de norma (diseño, fabricación, ensayo, producto)
-   - Pruebas y ensayos requeridos
-   - Certificaciones exigidas
-   - Requisitos sísmicos específicos
-   - Normativa para materiales específicos
-
-7. IDENTIFICACIÓN, ROTULADO Y DOCUMENTACIÓN
-(Solo incluir datos disponibles):
-   - Requisitos de placas de características
-   - Etiquetado y marcación especial
-   - Documentación técnica requerida
-   - Planos y manuales solicitados
-   - Idioma para documentación
-
-8. EMBALAJE Y TRANSPORTE
-(Solo incluir datos disponibles):
-   - Tipo de embalaje requerido
-   - Materiales específicos
-   - Requisitos de preservación
-   - Condiciones de transporte
-   - Documentación para exportación
-   - Preparación para manejo
-
-9. ENTREGABLES DE LA OFERTA
-(Solo incluir datos disponibles):
-   - Planos requeridos
-   - Pruebas específicas
-   - Declaración de pérdidas
----
 Documento del Cliente (Pliego): {document_text}
 
 Resumen profesional (en ESPAÑOL):
@@ -164,6 +164,7 @@ Pregunta
 Respuesta util basada en el contecto dado y la pregunta realizada
 """
     )
+
 
 
 
