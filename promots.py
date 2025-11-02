@@ -1,10 +1,14 @@
 from langchain.prompts import PromptTemplate
 
 def get_prompt_summary_str():
+    """
+    Prompt principal para generar el resumen ejecutivo SIN tablas.
+    Las tablas se generarán automáticamente en paralelo con otro prompt.
+    """
     return PromptTemplate(
         input_variables=["context", "question"],
         template="""
-             Eres un ingeniero electricista y mecánico especializado en el diseño y fabricación de transformadores para la empresa Magnetron S.A.S.
+Eres un ingeniero electricista y mecánico especializado en el diseño y fabricación de transformadores para la empresa Magnetron S.A.S.
 
 Tu misión es analizar el siguiente Pliego de Condiciones Técnicas y elaborar un Resumen Ejecutivo exhaustivo en ESPAÑOL que sirva como base de arranque para ingeniería y producción.
 
@@ -14,10 +18,10 @@ INSTRUCCIONES DE SALIDA:
 - NO escribas "No especificado" en cada punto; simplemente omite los datos no disponibles.
 - Incluye valores numéricos concretos con sus unidades.
 - Si existen varios clientes o variantes, diferéncialos claramente.
-- Genera dos tablas verticales aptas para copiar en Excel y luego el resumen,.
 - Mantén un tono técnico, preciso y conciso; no inventes datos.
 - Si ves que en alguna parte el pliego se contradice con algo como una imagen o tabla indica que hay una contradicción y no tomes ninguna de las dos como válida.
 - Si el pliego tiene imagenes o planos nombralas para que el diseñador las revise, descubrelas e indica que hay en ellas.
+- NO generes tablas en este resumen. Las tablas se crearán automáticamente por separado.
 
 1. ESPECIFICACIONES GENERALES
 (Solo incluir los datos disponibles sobre):
@@ -103,73 +107,80 @@ INSTRUCCIONES DE SALIDA:
    - Planos requeridos
    - Pruebas específicas
    - Declaración de pérdidas
----
-Tabla #1 – Parámetros Eléctricos (FORMATO VERTICAL)
-Campo | Valor
-Compañía | Magnetron S.A.S.
-Especificaciones del cliente | [Nombre del pliego y código]
-Normas | [Normas de manufactura]
-Tipos de transformador | [Tipos incluidos]
-Potencias (kVA/MVA) | [Potencias]
-Fases | [Fases]
-Tipo de refrigeración | [Según pliego]
-Polaridad / Grupo de conexión | [Según pliego]
-Voltaje primario (kV) | [Según pliego]
-BIL primario (kV) | [Según pliego]
-Voltaje secundario (kV) | [Según pliego]
-BIL secundario (kV) | [Según pliego]
-Frecuencia (Hz) | [Según pliego]
-Eficiencia requerida | [Según pliego o N/A]
-Pérdidas con carga (W) | [Según pliego o N/A]
-Pérdidas sin carga (W) | [Según pliego o N/A]
-Impedancia (%) | [Según pliego]
-Corriente de excitación (%) | [Según pliego]
 
-Tabla #2 – Accesorios (FORMATO VERTICAL)
-Accesorio | Características
-Terminal de baja tensión | [Según pliego o N/A]
-Terminal de alta tensión | [Según pliego o N/A]
-Conmutador | [Según pliego o N/A]
-Seccionador | [Según pliego o N/A]
-Pararrayos | [Según pliego o N/A]
-Fusibles | [Según pliego o N/A]
-Termómetro | [Según pliego o N/A]
-Nivel de aceite | [Según pliego o N/A]
-Medidor de presión y/o vacío | [Según pliego o N/A]
-Válvulas | [Según pliego o N/A]
-Otros accesorios | [Listar o N/A]
-Documento del Cliente (Pliego): {document_text}
+Documento del Cliente (Pliego): {context}
+
+Pregunta adicional (si aplica): {question}
 
 Resumen profesional (en ESPAÑOL):
-
 """
     )
 
-def get_prompt_RAG_str():
+
+def get_prompt_table_generator():
+    """
+    Prompt especializado para generar las dos tablas técnicas en formato vertical.
+    Se ejecuta automáticamente después del resumen.
+    """
     return PromptTemplate(
-        input_variables=["context", "question"],
+        input_variables=["resumen"],
         template="""
-Eres un asistente técnico especializado en normas sobre transformadores eléctricos (principalmente ANSI).
-su tarea consiste en responder a la pregunta del usuario basándose estrictamente en los siguientes fragmentos de contexto recuperados de los documentos.
-si la información necesaria para responder a la pregunta no figura en el contexto proporcionado, responda claramente: «La información solicitada no se encuentra en los documentos disponibles».
-no intente adivinar ni inventar información.
-sea conciso y directo en su respuesta. Si es posible, mencione de qué documento o norma procede la información (puede deducirlo de los metadatos si están disponibles en el contexto).
+Eres un ingeniero especializado en documentación técnica para transformadores de Magnetron S.A.S.
 
-Contexto
-{context}
+Tu tarea es tomar el siguiente RESUMEN EJECUTIVO y generar EXACTAMENTE DOS TABLAS en formato vertical (Markdown) que puedan copiarse directamente a Excel.
 
-Pregunta
-{question}
+IMPORTANTE: 
+- Genera SOLO las tablas, sin texto adicional antes o después.
+- Usa el formato Markdown estricto: | Campo | Valor |
+- Si algún dato no está disponible en el resumen, coloca "N/A"
+- NO inventes información que no esté en el resumen.
 
-Respuesta util basada en el contecto dado y la pregunta realizada
+---
+**Tabla #1 – Parámetros Eléctricos (FORMATO VERTICAL)**
+
+| Campo | Valor |
+|-------|-------|
+| Compañía | Magnetron S.A.S. |
+| Especificaciones del cliente | [Nombre del pliego y código] |
+| Normas | [Normas de manufactura] |
+| Tipos de transformador | [Tipos incluidos] |
+| Potencias (kVA/MVA) | [Potencias] |
+| Fases | [Fases] |
+| Tipo de refrigeración | [Según pliego] |
+| Polaridad / Grupo de conexión | [Según pliego] |
+| Voltaje primario (kV) | [Según pliego] |
+| BIL primario (kV) | [Según pliego] |
+| Voltaje secundario (kV) | [Según pliego] |
+| BIL secundario (kV) | [Según pliego] |
+| Frecuencia (Hz) | [Según pliego] |
+| Eficiencia requerida | [Según pliego o N/A] |
+| Pérdidas con carga (W) | [Según pliego o N/A] |
+| Pérdidas sin carga (W) | [Según pliego o N/A] |
+| Impedancia (%) | [Según pliego] |
+| Corriente de excitación (%) | [Según pliego] |
+
+---
+**Tabla #2 – Accesorios (FORMATO VERTICAL)**
+
+| Accesorio | Características |
+|-----------|-----------------|
+| Terminal de baja tensión | [Según pliego o N/A] |
+| Terminal de alta tensión | [Según pliego o N/A] |
+| Conmutador | [Según pliego o N/A] |
+| Seccionador | [Según pliego o N/A] |
+| Pararrayos | [Según pliego o N/A] |
+| Fusibles | [Según pliego o N/A] |
+| Termómetro | [Según pliego o N/A] |
+| Nivel de aceite | [Según pliego o N/A] |
+| Medidor de presión y/o vacío | [Según pliego o N/A] |
+| Válvulas | [Según pliego o N/A] |
+| Otros accesorios | [Listar o N/A] |
+
+========================================
+RESUMEN EJECUTIVO:
+{resumen}
+
+========================================
+GENERA LAS DOS TABLAS COMPLETAS EN FORMATO MARKDOWN:
 """
     )
-
-
-
-
-
-
-
-
-
