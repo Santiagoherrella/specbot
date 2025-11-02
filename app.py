@@ -14,8 +14,10 @@ from promots import get_prompt_summary_str
 from database_supabase import (
     init_database,
     guardar_analisis,
-    buscar_por_nombre_pdf
+    buscar_por_nombre_pdf,
+    is_production
 )
+from table_generator import generar_tablas_desde_resumen
 
 # ====================================
 
@@ -32,6 +34,12 @@ st.set_page_config(
     page_icon=str(LOGO) if LOGO.exists() else "📄",
     layout="wide",
 )
+
+# Indicador de entorno (justo después de set_page_config)
+if is_production():
+    st.success("🟢 MODO PRODUCCIÓN - Los datos se guardarán en Supabase")
+else:
+    st.warning("🟡 MODO DESARROLLO - Los datos NO se guardarán en Supabase")
 
 # -----------------------------
 # UTILIDADES
@@ -165,6 +173,9 @@ def main():
     if 'ultimo_resumen' not in st.session_state:
         st.session_state.ultimo_resumen = None
 
+    if 'ultimas_tablas' not in st.session_state:
+        st.session_state.ultimas_tablas = None
+
     if 'nombre_pdfs' not in st.session_state:
         st.session_state.nombre_pdfs = ""
 
@@ -194,6 +205,7 @@ def main():
         if st.button("🚪 Salir", use_container_width=True):
             st.session_state.usuario = ""
             st.session_state.ultimo_resumen = None
+            st.session_state.ultimas_tablas = None
             st.session_state.nombre_pdfs = ""
             st.rerun()
 
@@ -216,7 +228,7 @@ def main():
     if uploaded_file:
         st.success(f"✅ Archivo cargado: **{uploaded_file.name}**")
 
-        if st.button("🚀 Generar Resumen", type="primary", use_container_width=True):
+        if st.button("🚀 Generar Resumen y Tablas", type="primary", use_container_width=True):
             with st.spinner("⏳ Procesando PDF..."):
                 try:
                     nombre_pdf = uploaded_file.name
@@ -227,7 +239,7 @@ def main():
                     regenerar = False
 
                     if analisis_existente:
-                        st.info(f"📚 Este PDF ya fue analizado el {analisis_existente['fecha_hora'].strftime('%d/%m/%Y %H:%M')}")
+                        st.info(f"📚 Este PDF ya fue analizado el {analisis_existente['fecha_analisis'].strftime('%d/%m/%Y %H:%M')}")
 
                         col1, col2 = st.columns([3, 1])
                         with col1:
@@ -237,6 +249,7 @@ def main():
 
                         if not regenerar:
                             st.session_state.ultimo_resumen = analisis_existente['resumen']
+                            st.session_state.ultimas_tablas = analisis_existente.get('tablas_tecnicas')
                             st.session_state.nombre_pdfs = nombre_pdf
                             st.rerun()
 
@@ -250,57 +263,85 @@ def main():
                         else:
                             llm = get_llm()
                             prompt = get_prompt_summary_str()
-                            resumen = resumen_documento(docs, llm, prompt)
-
-                            st.session_state.ultimo_resumen = resumen
+                            
+                            # Generar resumen
+                            with st.spinner("📝 Generando resumen ejecutivo..."):
+                                resumen = resumen_documento(docs, llm, prompt)
+                                st.session_state.ultimo_resumen = resumen
+                            
+                            # Generar tablas en paralelo
+                            with st.spinner("📊 Generando tablas técnicas en paralelo..."):
+                                tablas = generar_tablas_desde_resumen(resumen, llm)
+                                st.session_state.ultimas_tablas = tablas
+                            
                             st.session_state.nombre_pdfs = nombre_pdf
 
                             try:
                                 guardar_analisis(
-                                    usuario=st.session_state.usuario,
-                                    nombre_pdf=nombre_pdf,
-                                    resumen=resumen
+                                    nombre_archivo=nombre_pdf,
+                                    resumen=resumen,
+                                    tablas=tablas
                                 )
-                            except:
-                                pass
+                            except Exception as e:
+                                st.warning(f"⚠️ No se pudo guardar en BD: {e}")
 
                             st.rerun()
 
                 except Exception as e:
                     st.error(f"❌ Error: {e}")
 
-    # Mostrar resumen
+    # Mostrar resultados en dos columnas
     if st.session_state.ultimo_resumen:
         st.markdown("---")
-        st.markdown("### 📄 Resumen Generado")
-
-        if st.session_state.nombre_pdfs:
-            st.caption(f"📎 **Archivo:** {st.session_state.nombre_pdfs}")
-
-        st.markdown(st.session_state.ultimo_resumen)
-
-        # Descarga solo en TXT
-        st.markdown("---")
-        nombre_archivo = limpiar_nombre_archivo(st.session_state.nombre_pdfs)
-        st.download_button(
-            label="📥 Descargar Resumen (TXT)",
-            data=st.session_state.ultimo_resumen,
-            file_name=f"resumen_{nombre_archivo}.txt",
-            mime="text/plain",
-            use_container_width=True
-        )
+        
+        # Dos columnas: Resumen | Tablas
+        col_resumen, col_tablas = st.columns([1, 1])
+        
+        with col_resumen:
+            st.markdown("### 📄 Resumen Ejecutivo")
+            if st.session_state.nombre_pdfs:
+                st.caption(f"📎 **Archivo:** {st.session_state.nombre_pdfs}")
+            
+            st.markdown(st.session_state.ultimo_resumen)
+            
+            # Botón descarga resumen
+            nombre_archivo = limpiar_nombre_archivo(st.session_state.nombre_pdfs)
+            st.download_button(
+                label="📥 Descargar Resumen (TXT)",
+                data=st.session_state.ultimo_resumen,
+                file_name=f"resumen_{nombre_archivo}.txt",
+                mime="text/plain",
+                use_container_width=True,
+                key="download_resumen"
+            )
+        
+        with col_tablas:
+            st.markdown("### 📊 Tablas Técnicas")
+            
+            if st.session_state.ultimas_tablas:
+                st.markdown(st.session_state.ultimas_tablas)
+                
+                # Botón descarga tablas
+                st.download_button(
+                    label="📥 Descargar Tablas (Markdown)",
+                    data=st.session_state.ultimas_tablas,
+                    file_name=f"tablas_{nombre_archivo}.md",
+                    mime="text/markdown",
+                    use_container_width=True,
+                    key="download_tablas"
+                )
+            else:
+                st.info("⏳ Las tablas se generan automáticamente después del resumen")
 
     # Footer
     st.markdown("---")
     st.markdown(
         '<div style="text-align: center; color: gray;">'
-        'Magnetron S.A.S. | Analizador de Pliegos Técnicos v2.0'
+        'Magnetron S.A.S. | Analizador de Pliegos Técnicos v2.1'
         '</div>',
         unsafe_allow_html=True
     )
-    # ----------------------------- 
-# BOTÓN DE FEEDBACK FLOTANTE
-# ----------------------------- 
+
 # ----------------------------- 
 # BOTÓN DE FEEDBACK FLOTANTE
 # ----------------------------- 
@@ -348,12 +389,5 @@ def render_feedback_button():
 
 render_feedback_button()
 
-
-
 if __name__ == "__main__":
     main()
-
-
-
-
-
