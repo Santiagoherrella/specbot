@@ -108,9 +108,11 @@ INSTRUCCIONES DE SALIDA:
    - Pruebas específicas
    - Declaración de pérdidas
 
-Documento del Cliente (Pliego): {context}
+Documento del Cliente (Pliego): 
+{context}
 
-Pregunta adicional (si aplica): {question}
+Pregunta adicional (si aplica): 
+{question}
 
 Resumen profesional (en ESPAÑOL):
 """
