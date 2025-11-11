@@ -2,6 +2,7 @@
 database_supabase.py - Módulo de gestión de base de datos PostgreSQL (Supabase)
 Almacena el historial de análisis de PDFs en Supabase.
 Detecta automáticamente si está en modo desarrollo o producción.
+Trabaja con la tabla HISTORIAL existente.
 """
 
 import os
@@ -38,37 +39,28 @@ def get_db_connection():
 
 def init_database():
     """
-    Inicializa la base de datos y crea la tabla si no existe.
-    Se ejecuta al inicio de la aplicación.
+    Verifica y actualiza la tabla historial existente.
+    Solo agrega la columna tablas_tecnicas si no existe.
+    NO crea una nueva tabla.
     """
     if not is_production():
-        print("⚠️ MODO DESARROLLO - Base de datos no se inicializará")
+        print("⚠️ MODO DESARROLLO - Base de datos no se modificará")
         return
     
     try:
         conn = get_db_connection()
         cur = conn.cursor()
         
-        # Crear tabla con columnas adicionales para las tablas generadas
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS analisis_pdfs (
-                id SERIAL PRIMARY KEY,
-                nombre_archivo TEXT NOT NULL,
-                resumen TEXT NOT NULL,
-                tablas_tecnicas TEXT,
-                fecha_analisis TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        
-        # Agregar columna si no existe (para bases de datos existentes)
+        # Solo agregar columna tablas_tecnicas si no existe
         cur.execute("""
             DO $$ 
             BEGIN 
                 BEGIN
-                    ALTER TABLE analisis_pdfs ADD COLUMN tablas_tecnicas TEXT;
+                    ALTER TABLE historial ADD COLUMN tablas_tecnicas TEXT;
+                    RAISE NOTICE 'Columna tablas_tecnicas agregada';
                 EXCEPTION
                     WHEN duplicate_column THEN 
-                        NULL;
+                        RAISE NOTICE 'Columna tablas_tecnicas ya existe';
                 END;
             END $$;
         """)
@@ -76,76 +68,96 @@ def init_database():
         conn.commit()
         cur.close()
         conn.close()
-        print("✅ Base de datos inicializada correctamente (PRODUCCIÓN)")
+        print("✅ Tabla historial verificada y actualizada (PRODUCCIÓN)")
     except Exception as e:
-        print(f"❌ Error al inicializar base de datos: {e}")
+        print(f"❌ Error al verificar tabla historial: {e}")
 
-def guardar_analisis(nombre_archivo, resumen, tablas=None):
+def guardar_analisis(usuario, nombre_pdf, resumen, tablas=None):
     """
-    Guarda el análisis en la base de datos (solo en producción).
+    Guarda el análisis en la tabla historial existente (solo en producción).
+    
+    Args:
+        usuario (str): Nombre del usuario que realizó el análisis
+        nombre_pdf (str): Nombre del archivo PDF analizado
+        resumen (str): Texto completo del resumen generado
+        tablas (str, optional): Tablas técnicas generadas
+    
+    Returns:
+        int o bool: ID del registro insertado en producción, True en desarrollo
     """
     if not is_production():
-        print(f"⚠️ MODO DESARROLLO - No se guardará en base de datos: {nombre_archivo}")
+        print(f"⚠️ MODO DESARROLLO - No se guardará en base de datos: {nombre_pdf}")
         return True
     
     try:
         conn = get_db_connection()
         cur = conn.cursor()
         
-        cur.execute(
-            """
-            INSERT INTO analisis_pdfs (nombre_archivo, resumen, tablas_tecnicas)
-            VALUES (%s, %s, %s)
-            """,
-            (nombre_archivo, resumen, tablas)
-        )
+        cur.execute("""
+            INSERT INTO historial (usuario, nombre_pdf, resumen, tablas_tecnicas, fecha_hora)
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING id
+        """, (usuario, nombre_pdf, resumen, tablas, datetime.now()))
         
+        registro_id = cur.fetchone()[0]
         conn.commit()
         cur.close()
         conn.close()
-        print(f"✅ Análisis guardado en base de datos (PRODUCCIÓN): {nombre_archivo}")
-        return True
+        
+        print(f"✅ Análisis guardado en historial (PRODUCCIÓN): {nombre_pdf} - ID: {registro_id}")
+        return registro_id
     except Exception as e:
         print(f"❌ Error al guardar en base de datos: {e}")
         return False
 
-def buscar_por_nombre_pdf(nombre_archivo):
+def buscar_por_nombre_pdf(nombre_pdf):
     """
-    Busca análisis previos por nombre de archivo (solo en producción).
+    Busca si ya existe un análisis para un PDF específico en historial (solo en producción).
+    
+    Args:
+        nombre_pdf (str): Nombre del archivo PDF
+    
+    Returns:
+        dict: Análisis encontrado o None si no existe
     """
     if not is_production():
-        print(f"⚠️ MODO DESARROLLO - No se buscará en base de datos: {nombre_archivo}")
+        print(f"⚠️ MODO DESARROLLO - No se buscará en base de datos: {nombre_pdf}")
         return None
     
     try:
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
         
-        cur.execute(
-            """
-            SELECT * FROM analisis_pdfs 
-            WHERE nombre_archivo = %s 
-            ORDER BY fecha_analisis DESC 
+        cur.execute("""
+            SELECT id, usuario, nombre_pdf, resumen, tablas_tecnicas, fecha_hora
+            FROM historial
+            WHERE nombre_pdf = %s
+            ORDER BY fecha_hora DESC
             LIMIT 1
-            """,
-            (nombre_archivo,)
-        )
+        """, (nombre_pdf,))
         
         resultado = cur.fetchone()
         cur.close()
         conn.close()
         
         if resultado:
-            print(f"✅ Análisis previo encontrado (PRODUCCIÓN): {nombre_archivo}")
+            print(f"✅ Análisis previo encontrado en historial (PRODUCCIÓN): {nombre_pdf}")
         
         return resultado
     except Exception as e:
         print(f"❌ Error al buscar en base de datos: {e}")
         return None
 
-def obtener_historial(limite=50):
+def obtener_historial(usuario=None, limite=50):
     """
     Obtiene el historial de análisis (solo en producción).
+    
+    Args:
+        usuario (str, optional): Si se especifica, filtra por usuario
+        limite (int): Número máximo de registros a devolver
+    
+    Returns:
+        list: Lista de diccionarios con los registros
     """
     if not is_production():
         print("⚠️ MODO DESARROLLO - No hay historial disponible")
@@ -155,14 +167,21 @@ def obtener_historial(limite=50):
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
         
-        cur.execute(
-            """
-            SELECT * FROM analisis_pdfs 
-            ORDER BY fecha_analisis DESC 
-            LIMIT %s
-            """,
-            (limite,)
-        )
+        if usuario:
+            cur.execute("""
+                SELECT id, usuario, nombre_pdf, resumen, tablas_tecnicas, fecha_hora
+                FROM historial
+                WHERE usuario = %s
+                ORDER BY fecha_hora DESC
+                LIMIT %s
+            """, (usuario, limite))
+        else:
+            cur.execute("""
+                SELECT id, usuario, nombre_pdf, resumen, tablas_tecnicas, fecha_hora
+                FROM historial
+                ORDER BY fecha_hora DESC
+                LIMIT %s
+            """, (limite,))
         
         resultados = cur.fetchall()
         cur.close()
@@ -172,3 +191,89 @@ def obtener_historial(limite=50):
     except Exception as e:
         print(f"❌ Error al obtener historial: {e}")
         return []
+
+def obtener_analisis_por_id(analisis_id):
+    """
+    Obtiene un análisis específico por su ID de la tabla historial (solo en producción).
+    
+    Args:
+        analisis_id (int): ID del análisis
+    
+    Returns:
+        dict: Diccionario con los datos del análisis o None si no existe
+    """
+    if not is_production():
+        print(f"⚠️ MODO DESARROLLO - No se buscará análisis por ID: {analisis_id}")
+        return None
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        
+        cur.execute("""
+            SELECT id, usuario, nombre_pdf, resumen, tablas_tecnicas, fecha_hora
+            FROM historial
+            WHERE id = %s
+        """, (analisis_id,))
+        
+        resultado = cur.fetchone()
+        cur.close()
+        conn.close()
+        
+        return resultado
+    except Exception as e:
+        print(f"❌ Error al obtener análisis por ID: {e}")
+        return None
+
+def obtener_estadisticas():
+    """
+    Obtiene estadísticas generales de la tabla historial (solo en producción).
+    
+    Returns:
+        dict: Diccionario con estadísticas
+    """
+    if not is_production():
+        print("⚠️ MODO DESARROLLO - No hay estadísticas disponibles")
+        return {
+            "total_analisis": 0,
+            "total_usuarios": 0,
+            "top_usuarios": []
+        }
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # Total de análisis
+        cur.execute("SELECT COUNT(*) FROM historial")
+        total_analisis = cur.fetchone()[0]
+        
+        # Total de usuarios únicos
+        cur.execute("SELECT COUNT(DISTINCT usuario) FROM historial")
+        total_usuarios = cur.fetchone()[0]
+        
+        # Análisis por usuario (top 5)
+        cur.execute("""
+            SELECT usuario, COUNT(*) as total
+            FROM historial
+            GROUP BY usuario
+            ORDER BY total DESC
+            LIMIT 5
+        """)
+        top_usuarios = cur.fetchall()
+        
+        cur.close()
+        conn.close()
+        
+        return {
+            "total_analisis": total_analisis,
+            "total_usuarios": total_usuarios,
+            "top_usuarios": top_usuarios
+        }
+    except Exception as e:
+        print(f"❌ Error al obtener estadísticas: {e}")
+        return {
+            "total_analisis": 0,
+            "total_usuarios": 0,
+            "top_usuarios": []
+        }
