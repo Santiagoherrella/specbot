@@ -239,7 +239,7 @@ def main():
                     regenerar = False
 
                     if analisis_existente:
-                        st.info(f"📚 Este PDF ya fue analizado el {analisis_existente['fecha_analisis'].strftime('%d/%m/%Y %H:%M')}")
+                        st.info(f"📚 Este PDF ya fue analizado el {analisis_existente['fecha_hora'].strftime('%d/%m/%Y %H:%M')}")
 
                         col1, col2 = st.columns([3, 1])
                         with col1:
@@ -391,3 +391,4 @@ render_feedback_button()
 
 if __name__ == "__main__":
     main()
+
