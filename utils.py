@@ -167,25 +167,21 @@ def extract_text_with_ocr(pdf_path, filename, total_pages=None):
 
 
 def resumen_documento(docs, llm_instance, resumen_prompt):
-    """
-    Genera el resumen de los documentos concatenados usando el LLM.
-    
-    Args:
-        docs: Lista de documentos Document
-        llm_instance: Instancia del modelo de lenguaje
-        resumen_prompt: Plantilla del prompt para resumen
-        
-    Returns:
-        Texto del resumen generado
-    """
     texto = "\n\n".join([doc.page_content for doc in docs])
-    texto_corto = texto[:1500000]  # Limita tamaño para el prompt
-    prompt = resumen_prompt.format(document_text=texto_corto)
+    texto_corto = texto[:1500000]
+    
+    # Verificar si el prompt tiene placeholder
+    if "{document_text}" in resumen_prompt:
+        prompt_final = resumen_prompt.format(document_text=texto_corto)
+    else:
+        # Concatenar el prompt con el texto
+        prompt_final = f"{resumen_prompt}\n\n{texto_corto}"
     
     try:
-        respuesta = llm_instance.invoke(prompt)
+        respuesta = llm_instance.invoke(prompt_final)
         return respuesta.content.strip() if hasattr(respuesta, 'content') else str(respuesta).strip()
     except Exception as e:
         st.error(f"Error generando resumen: {e}")
-        return "No se pudo generar el resumen.""No se pudo generar el resumen."
+        return "No se pudo generar el resumen."
+
 
