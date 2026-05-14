@@ -43,7 +43,7 @@ INSTRUCCIONES DE SALIDA:
 
 3. CARACTERÍSTICAS CONSTRUCTIVAS Y MECÁNICAS
 (Discriminar por cliente si aplica; solo incluir datos disponibles):
-   - Tipo de refrigeración (si es con aceite, ester o fluido vegetal biodegradable colocar refirgerecion KNAN [K esster o fluido diferente al aciete, O oild aceite mineral no inhibido])
+   - Tipo de refrigeración (si es con aceite, ester o fluido vegetal biodegradable colocar refirgerecion KNAN [K ester o fluido diferente al aciete, O oil aceite mineral no inhibido])
    - Materiales de bobinados
    - Forma constructiva de la parte activa
    - Tipo de núcleo y material
